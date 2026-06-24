@@ -37,6 +37,7 @@ Node.js + SQS로 구현했던 단일 워커 푸시 시스템을 Python으로 재
 | 패키지 관리 | uv |
 | 린트/포맷 | ruff |
 | 테스트 | pytest |
+| 부하 테스트 | Locust |
 
 ---
 
@@ -115,10 +116,10 @@ docker run -d -p 6379:6379 redis:7
 ### 앱 실행
 
 ```bash
-uv run fastapi dev          # FastAPI 개발 서버 (포트 8000)
-uv run celery -A worker.celery_app worker --loglevel=info # Celery 워커 실행 (별도 터미널)
-uv run celery -A worker.celery_app worker --loglevel=info --concurrency=4 # 멀티 워커 실행 (concurrency=4)
-uv run celery -A app.worker flower --port=5500      # Flower 모니터링
+uv run fastapi dev app/main.py                                        # FastAPI 개발 서버 (포트 8000)
+uv run celery -A app.worker worker --loglevel=info                    # Celery 워커 실행 (별도 터미널)
+uv run celery -A app.worker worker --loglevel=info --concurrency=4    # 멀티 워커 실행 (concurrency=4)
+uv run celery -A app.worker flower --port=5500                        # Flower 모니터링
 ```
 
 ---
@@ -146,6 +147,8 @@ uv run pytest                                           # 전체
 uv run pytest tests/unit/                               # 단위 (services, celery tasks)
 uv run pytest tests/e2e/                                # E2E
 uv run pytest --html=report.html --self-contained-html  # HTML 리포트
+uv run locust -f locustfile.py                          # 부하 테스트 (웹 UI: localhost:8089)
+uv run locust -f locustfile.py --headless -u 100 -r 10  # 부하 테스트 (CLI)
 ```
 
 ---
