@@ -17,7 +17,7 @@
 ## 1단계 — 프로젝트 기반
 
 - [x] **패키지 의존성 추가**
-  - `pyproject.toml`: celery, redis, asyncpg, pydantic-settings, python-dotenv, pytest, pytest-asyncio, pytest-mock, pytest-html 추가
+  - `pyproject.toml`: celery, redis, supabase, pydantic-settings, python-dotenv, pytest, pytest-asyncio, pytest-mock, pytest-html 추가
   - `.env.example` 작성 (SUPABASE_URL, SUPABASE_KEY, REDIS_URL, FAKE_FCM_SUCCESS_RATE 등)
 
 - [x] **디렉토리 스캐폴딩**
@@ -30,11 +30,11 @@
 
 - [ ] **설정 로드** (`app/core/config.py`)
   - pydantic-settings로 `.env` 로드
-  - DATABASE_URL, REDIS_URL, FAKE_FCM_SUCCESS_RATE, CELERY_BROKER_URL, CELERY_RESULT_BACKEND
+  - SUPABASE_URL, SUPABASE_KEY, REDIS_URL, FAKE_FCM_SUCCESS_RATE, CELERY_BROKER_URL, CELERY_RESULT_BACKEND
 
 - [ ] **DB 연결** (`app/core/database.py`)
-  - asyncpg connection pool
-  - FastAPI lifespan으로 startup/shutdown 관리
+  - supabase-py AsyncClient
+  - init_db/close_db로 FastAPI lifespan 관리
 
 - [ ] **Redis 연결** (`app/core/redis.py`)
   - DB2 (idempotency) 클라이언트 설정

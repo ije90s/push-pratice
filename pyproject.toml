@@ -5,12 +5,12 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "asyncpg>=0.31.0",
     "celery[redis]>=5.6.3",
     "fastapi[standard]>=0.138.0",
     "pydantic-settings>=2.14.2",
     "python-dotenv>=1.2.2",
     "ruff>=0.15.19",
+    "supabase>=2.31.0",
 ]
 
 [dependency-groups]

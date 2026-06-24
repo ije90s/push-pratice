@@ -1,41 +1,21 @@
-from contextlib import asynccontextmanager
-from typing import AsyncGenerator
-
-import asyncpg
-from asyncpg import Pool
+from supabase import AsyncClient, acreate_client
 
 from app.core.config import settings
 
-_pool: Pool | None = None
+_client: AsyncClient | None = None
 
 
 async def init_db() -> None:
-    global _pool
-    _pool = await asyncpg.create_pool(settings.database_url)
+    global _client
+    _client = await acreate_client(settings.supabase_url, settings.supabase_key)
 
 
 async def close_db() -> None:
-    global _pool
-    if _pool:
-        await _pool.close()
-        _pool = None
+    global _client
+    _client = None
 
 
-def get_pool() -> Pool:
-    if _pool is None:
-        raise RuntimeError("DB pool is not initialized")
-    return _pool
-
-
-@asynccontextmanager
-async def lifespan_db():
-    await init_db()
-    try:
-        yield
-    finally:
-        await close_db()
-
-
-async def get_db() -> AsyncGenerator[asyncpg.Connection, None]:
-    async with get_pool().acquire() as conn:
-        yield conn
+def get_db() -> AsyncClient:
+    if _client is None:
+        raise RuntimeError("Supabase client is not initialized")
+    return _client
