@@ -116,7 +116,8 @@ docker run -d -p 6379:6379 redis:7
 
 ```bash
 uv run fastapi dev          # FastAPI 개발 서버 (포트 8000)
-uv run celery -A app.worker worker --loglevel=info  # Celery 워커
+uv run celery -A worker.celery_app worker --loglevel=info # Celery 워커 실행 (별도 터미널)
+uv run celery -A worker.celery_app worker --loglevel=info --concurrency=4 # 멀티 워커 실행 (concurrency=4)
 uv run celery -A app.worker flower --port=5500      # Flower 모니터링
 ```
 
