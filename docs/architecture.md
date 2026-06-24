@@ -59,18 +59,22 @@
   └── Redis DB2: SET idempotency:{key} NX EX 86400
       ├── SET 실패 (키 존재) → 중복, ack 후 종료
       └── SET 성공 → push_logs.send_at 기록, status = PENDING 유지
-           └── users 테이블 전체 조회 (청크 단위)
-               └── Fake FCM 전송 (랜덤 성공/실패)
-                   ├── 성공 → success_count 누적
-                   └── 실패 → failed_count 누적, error_message 기록
+           └── 태스크 처리 랜덤 실패 시뮬레이션 (20%)
+               ├── 실패 + retries < max_retries → retry 스케줄, retry_count/error_message 기록
+               └── 실패 + retries >= max_retries → status = DEAD, failed_at 기록 (DLQ)
+           └── (성공 시) users 테이블 전체 조회
+               └── 100건 청크 + 30ms 송신 제어
+                   └── Fake FCM 전송 (랜덤 성공/실패)
+                       ├── 성공 → success_count 누적
+                       └── 실패 → failed_count 누적 (retry 없음, 이미 전송 처리)
            └── 전송 완료 → status = SENT, completed_at 기록, ack
 
 [3] 재시도 / DLQ
-  랜덤으로 실패률 조정하여 실패 처리
-  └── Celery retry (지수 백오프: 60s → 120s → 240s)
-      └── max_retries(3) 초과
-          └── push_logs UPDATE: status = DEAD, failed_at 기록
-              → push_logs WHERE status = 'DEAD' 가 DLQ
+  태스크 처리 랜덤 실패 → Celery retry (지수 백오프: 60s → 120s → 240s)
+  └── retries >= max_retries(3) 도달 시
+      └── push_logs UPDATE: status = DEAD, failed_at 기록 후 종료
+          → push_logs WHERE status = 'DEAD' 가 DLQ
+  ※ FCM 성공/실패는 retry 대상 아님 (카운트만 기록)
 
 [4] DLQ 재처리
   POST /dlq/{idempotency_key}/retry

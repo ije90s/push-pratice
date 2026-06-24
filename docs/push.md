@@ -40,9 +40,11 @@ users 전체 조회
 
 | 상황 | 처리 |
 |---|---|
-| 단건 전송 실패 | `failed_count` 누적, 전체 흐름 계속 진행 |
-| 전체 실패율 임계 초과 | Celery retry (지수 백오프) |
-| max_retries(3) 초과 | `push_logs.status = 'DEAD'`, DLQ 이동 |
+| FCM 단건 전송 실패 | `failed_count` 누적, 전체 흐름 계속 진행 (retry 없음) |
+| 태스크 처리 랜덤 실패 (20%) | Celery retry (지수 백오프) |
+| retries >= max_retries(3) | `push_logs.status = 'DEAD'`, failed_at 기록 후 종료 |
+
+FCM 성공/실패는 retry 대상이 아니다. 이미 전송을 시도한 것으로 간주하며, 결과는 카운트로만 기록한다.
 
 ## 재시도 전략 (지수 백오프)
 

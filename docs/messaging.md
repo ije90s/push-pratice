@@ -20,13 +20,15 @@ v1(Node.js + SQS)의 단일 워커 한계를 극복하기 위해 **Celery + Redi
   └── Redis에서 idempotency_key 존재 확인
       ├── 존재 → 중복 처리, 태스크 종료 (ack)
       └── 없음 → Redis에 키 SET (TTL 설정)
-           └── users 전체 조회 → 청크 분할 → 송신 제어
-               └── Fake FCM 전송 (랜덤 성공/실패 시뮬레이션)
+           └── send_at 기록
+           └── 태스크 처리 랜덤 실패 시뮬레이션 (20%)
+               ├── 실패 + retries < max_retries → retry 스케줄 (지수 백오프)
+               └── 실패 + retries >= max_retries → DB DEAD 업데이트 (DLQ), 종료
+           └── (성공 시) users 전체 조회 → 100건 청크 → 30ms 송신 제어
+               └── Fake FCM 전송 (랜덤 성공/실패)
                    ├── 성공 → success_count 누적
-                   └── 실패 → failed_count 누적
+                   └── 실패 → failed_count 누적 (retry 없음)
            └── 전송 완료 → DB SENT 업데이트, ack
-           └── 랜덤 실패 임계 초과 → retry 스케줄 (지수 백오프)
-                         └── max_retries 초과 → DB DEAD 업데이트 (DLQ)
 ```
 
 ## Celery 설정
