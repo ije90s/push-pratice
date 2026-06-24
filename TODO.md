@@ -107,10 +107,10 @@
   - success_rate=1.0 → 항상 True
   - success_rate=0.0 → 항상 False
 
-- [ ] **E2E 테스트 — Push API** (`tests/e2e/test_push_api.py`) **[필수]**
-  - POST /push → 202, status=PENDING
+- [x] **E2E 테스트 — Push API** (`tests/e2e/test_push_api.py`) **[필수]**
+  - POST /push → 201, status=PENDING
   - GET /push/{push_id} → 200
 
-- [ ] **E2E 테스트 — DLQ API** (`tests/e2e/test_dlq_api.py`) **[필수]**
+- [x] **E2E 테스트 — DLQ API** (`tests/e2e/test_dlq_api.py`) **[필수]**
   - GET /dlq → 200, DEAD 항목 반환
-  - POST /dlq/{key}/retry → 202, status=PENDING
+  - POST /dlq/{key}/retry → 201, status=PENDING
