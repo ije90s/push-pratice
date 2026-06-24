@@ -11,8 +11,8 @@ Node.js + SQS로 구현했던 단일 워커 푸시 시스템을 Python으로 재
 ### v1 한계 (Node.js + SQS)
 
 - 단일 워커 구조 → 멀티 워커 확장 불가
-- Visibility Timeout 초과 시 중복 처리 발생
-- Worker crash 시 메시지 유실 가능성
+- Visibility Timeout 초과 시 중복 처리 발생 → 선 삭제 후 처리로 완화 (근본 해결 아님)
+- Worker crash 시 메시지 유실 가능성 → 성공/실패 이중 로그로 상태 추적
 
 ### v2 해결 전략 (Python + Celery)
 
