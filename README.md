@@ -37,7 +37,6 @@ Node.js + SQS로 구현했던 단일 워커 푸시 시스템을 Python으로 재
 | 패키지 관리 | uv |
 | 린트/포맷 | ruff |
 | 테스트 | pytest |
-| 부하 테스트 | Locust |
 
 ---
 
@@ -147,8 +146,6 @@ uv run pytest                                           # 전체
 uv run pytest tests/unit/                               # 단위 (services, celery tasks)
 uv run pytest tests/e2e/                                # E2E
 uv run pytest --html=report.html --self-contained-html  # HTML 리포트
-uv run locust -f locustfile.py                          # 부하 테스트 (웹 UI: localhost:8089)
-uv run locust -f locustfile.py --headless -u 100 -r 10  # 부하 테스트 (CLI)
 ```
 
 ---

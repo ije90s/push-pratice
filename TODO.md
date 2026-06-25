@@ -130,18 +130,3 @@
   - 재시도 후 SENT 또는 max_retries 초과 시 DEAD 확인
 
 ---
-
-## 7단계 — 부하 테스트 (Locust)
-
-- [ ] **패키지 추가**
-  - `pyproject.toml`: locust 추가
-  - `locustfile.py` 작성
-
-- [ ] **멀티 워커 처리량** (`locustfile.py` 시나리오)
-  - 100개 push 동시 enqueue
-  - worker 2 / 4 / 8 구성별 처리 시간 및 처리량 측정
-  - 선형 확장성 확인 (worker 2배 → 처리량 ~2배)
-
-- [ ] **Redis 장애** (`locustfile.py` 시나리오)
-  - Redis 컨테이너 stop 후 API/worker 동작 확인
-  - Redis 재기동 후 큐에 남은 태스크 자동 재처리 확인
