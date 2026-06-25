@@ -119,12 +119,12 @@
 
 ## 6단계 — E2E 테스트 (추가)
 
-- [ ] **멱등성 동시성** (`tests/e2e/test_idempotency_concurrency.py`)
+- [x] **멱등성 동시성** (`tests/e2e/test_idempotency_concurrency.py`)
   - 같은 `idempotency_key`로 동시에 N개 요청 발사
   - push_logs 1건만 생성됐는지 확인
   - Celery 태스크도 1번만 실행됐는지 확인
 
-- [ ] **워커 crash 복구** (`tests/e2e/test_worker_crash.py`)
+- [x] **워커 crash 복구** (`tests/e2e/test_worker_crash.py`)
   - 태스크 처리 중 워커 `kill -9`
   - `acks_late=True`로 태스크 재큐잉 확인
   - 재시도 후 SENT 또는 max_retries 초과 시 DEAD 확인
