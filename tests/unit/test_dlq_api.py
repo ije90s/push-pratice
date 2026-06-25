@@ -96,7 +96,7 @@ def test_list_dlq_empty(mocker):
     assert res.json() == {"items": [], "total": 0}
 
 
-def test_retry_dlq_returns_201(mocker):
+def test_retry_dlq_returns_200(mocker):
     _make_client(mocker, rows=[_DEAD_ROW], count=1)
 
     with TestClient(app) as c:
