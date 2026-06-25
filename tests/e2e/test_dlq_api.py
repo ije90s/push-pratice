@@ -11,10 +11,10 @@ def test_list_dlq_returns_dead_items(e2e_client: TestClient, dead_push_row: dict
     assert dead_push_row["id"] in ids
 
 
-def test_retry_dlq_returns_201(e2e_client: TestClient, dead_push_row: dict) -> None:
+def test_retry_dlq_returns_200(e2e_client: TestClient, dead_push_row: dict) -> None:
     res = e2e_client.post(f"/dlq/{dead_push_row['idempotency_key']}/retry")
 
-    assert res.status_code == 201
+    assert res.status_code == 200
     body = res.json()
     assert body["status"] == "PENDING"
     assert body["push_id"] == dead_push_row["id"]

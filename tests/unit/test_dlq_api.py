@@ -104,7 +104,7 @@ def test_retry_dlq_returns_201(mocker):
 
     app.dependency_overrides.clear()
 
-    assert res.status_code == 201
+    assert res.status_code == 200
     body = res.json()
     assert body["status"] == "PENDING"
     assert "push_id" in body

@@ -20,8 +20,7 @@ POST /push
 ```json
 {
   "title": "새로운 메시지",
-  "content": "공지사항입니다.",
-  "idempotency_key": "req-abc-001"
+  "content": "공지사항입니다."
 }
 ```
 
@@ -29,9 +28,8 @@ POST /push
 |---|---|---|---|
 | `title` | string | ✅ | 알림 제목 |
 | `content` | string | ✅ | 알림 본문 |
-| `idempotency_key` | string | - | 중복 방지 키. 미입력 시 서버에서 UUID 발급 |
 
-**응답 `202 Accepted`**
+**응답 `201 Created`**
 
 ```json
 {
@@ -118,7 +116,7 @@ GET /dlq?limit=20&offset=0
 POST /dlq/{idempotency_key}/retry
 ```
 
-**응답 `202 Accepted`**
+**응답 `200 OK`**
 
 ```json
 {

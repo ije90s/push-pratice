@@ -25,7 +25,7 @@ async def list_dlq(
     return DlqListResponse(items=items, total=total)
 
 
-@router.post("/{idempotency_key}/retry", status_code=201, response_model=DlqRetryResponse)
+@router.post("/{idempotency_key}/retry", status_code=200, response_model=DlqRetryResponse)
 async def retry_dlq(
     idempotency_key: str,
     db: AsyncClient = Depends(get_db),
